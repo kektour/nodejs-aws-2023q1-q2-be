@@ -1,0 +1,118 @@
+openapi: 3.0.3
+info:
+  title: Product Service
+  version: 1.0.00
+servers:
+  - url: https://rtoao2fz4k.execute-api.us-east-1.amazonaws.com
+tags:
+  - name: Products
+    description: Everything about products
+paths:
+  /products:
+    get:
+      tags:
+        - Products
+      summary: Get list of products
+      description: Get list of products
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Product'
+  /products/available:
+    get:
+      tags:
+        - Products
+      summary: Get list of available products
+      description: Get list of available products
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/AvailableProduct'
+  /products/{productId}:
+    get:
+      tags:
+        - Products
+      summary: Get product
+      description: Get product by ID
+      parameters:
+        - name: productId
+          in: path
+          description: ID of product to return
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            text/plain:
+              schema:
+                type: object
+                properties:
+                  data:
+                    $ref: '#/components/schemas/AvailableProduct'
+        '404':
+          description: Product not found
+          content:
+            text/plain:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: string
+                    nullable: true
+                    description: Always null value
+                  error:
+                    type: object
+                    properties:
+                      message:
+                       type: string
+                    required:
+                      - message
+                required:
+                  - data
+                  - error
+components:
+  schemas:
+    Product:
+      type: object
+      properties:
+        id:
+          type: string
+          example: "1"
+        title:
+          type: string
+          example: "Book name"
+        description:
+          type: string
+          example: "Book description"
+        price:
+          type: integer
+          format: int64
+          example: 10
+      required:
+        - id
+        - title
+        - description
+        - price
+    AvailableProduct:
+      allOf:
+        - $ref: '#/components/schemas/Product'
+      type: object
+      properties:
+        count: 
+          type: integer
+          format: int64
+          example: 10
+      required:
+        - count
