@@ -1,0 +1,36 @@
+service: product-service
+frameworkVersion: '3'
+
+provider:
+  name: aws
+  runtime: nodejs12.x
+  region: us-east-1
+  stage: dev
+  profile: nodejs-aws-2023q1-q2
+
+functions:
+  getProductsList:
+    handler: handlers.getProductsList
+    events:
+      - httpApi:
+          path: /products
+          method: get
+  getAvailableProductsList:
+    handler: handlers.getAvailableProductsList
+    events:
+      - httpApi:
+          path: /products/available
+          method: get
+  getProductById:
+    handler: handlers.getProductById
+    events:
+      - httpApi:
+          path: /products/{id}
+          method: get
+
+plugins:
+  - serverless-webpack
+
+custom:
+  webpack:
+    webpackConfig: 'webpack.config.js'
