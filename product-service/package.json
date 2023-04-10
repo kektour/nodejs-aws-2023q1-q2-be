@@ -3,8 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "scripts": {
+    "start": "sls offline",
     "deploy": "sls deploy",
-    "test": "jest"
+    "test": "jest",
+    "db-import": "aws dynamodb batch-write-item --request-items file://db.json"
   },
   "keywords": [],
   "author": "",
@@ -12,11 +14,16 @@
   "devDependencies": {
     "@types/jest": "^29.5.0",
     "@types/node": "^18.15.11",
+    "aws-sdk": "^2.1354.0",
     "jest": "^29.5.0",
+    "serverless-offline": "^12.0.4",
     "serverless-webpack": "^5.11.0",
     "ts-jest": "^29.1.0",
     "ts-loader": "^9.4.2",
     "typescript": "^5.0.3",
     "webpack": "^5.77.0"
+  },
+  "dependencies": {
+    "yup": "^1.0.2"
   }
 }

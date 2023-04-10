@@ -1,14 +1,22 @@
-import { getProductById } from '../../dataStorage';
-import { ApiEvent } from '../../types';
-import { createResponse } from '../../utils';
+import { ProductsProvider, ProductsProviderImpl } from '../../dataAccess/productsProvider';
+import { StocksProvider, StocksProviderImpl } from '../../dataAccess/stocksProvider';
+import { EnvService, EnvServiceImpl } from '../../services/envService';
+import { UtilsService, UtilsServiceImpl } from '../../services/utilsService';
+import { GetApiEvent } from '../../types';
 
-const handler = async (event: ApiEvent) => {
+const handler = async (event: GetApiEvent) => {
   const { id } = event.pathParameters;
 
-  const product = await getProductById(id);
+  const utilsService: UtilsService = new UtilsServiceImpl();
+  const envService: EnvService = new EnvServiceImpl();
+
+  const stocksProvider: StocksProvider = new StocksProviderImpl(envService);
+  const productsProvider: ProductsProvider = new ProductsProviderImpl(envService, stocksProvider);
+
+  const product = await productsProvider.getById(id);
 
   if (!product) {
-    return createResponse(404, {
+    return utilsService.createResponse(404, {
       data: null,
       error: {
         message: 'Product not found',
@@ -16,7 +24,7 @@ const handler = async (event: ApiEvent) => {
     });
   }
 
-  return createResponse(200, { data: product });
+  return utilsService.createResponse(200, { data: product });
 };
 
 export default handler;

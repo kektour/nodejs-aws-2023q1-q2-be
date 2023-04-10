@@ -1,0 +1,101 @@
+{
+  "AWS_CloudX_Course_Products": [
+    {
+      "PutRequest": {
+        "Item": {
+          "id": { "S": "1" },
+          "title": { "S": "Title 1" },
+          "description": { "S": "Description 1" },
+          "price": { "N": "49" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": { "S": "2" },
+          "title": { "S": "Title 2" },
+          "description": { "S": "Description 2" },
+          "price": { "N": "28" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": { "S": "3" },
+          "title": { "S": "Title 3" },
+          "description": { "S": "Description 3" },
+          "price": { "N": "21" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": { "S": "4" },
+          "title": { "S": "Title 4" },
+          "description": { "S": "Description 4" },
+          "price": { "N": "7" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": { "S": "5" },
+          "title": { "S": "Title 5" },
+          "description": { "S": "Description 5" },
+          "price": { "N": "17" }
+        }
+      }
+    }
+  ],
+  "AWS_CloudX_Course_Stocks": [
+    {
+      "PutRequest": {
+        "Item": {
+          "id": { "S": "1" },
+          "count": { "N": "99" },
+          "product_id": { "S": "1" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": { "S": "2" },
+          "count": { "N": "30" },
+          "product_id": { "S": "2" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": { "S": "3" },
+          "count": { "N": "12" },
+          "product_id": { "S": "3" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": { "S": "4" },
+          "count": { "N": "67" },
+          "product_id": { "S": "4" }
+        }
+      }
+    },
+    {
+      "PutRequest": {
+        "Item": {
+          "id": { "S": "5" },
+          "count": { "N": "40" },
+          "product_id": { "S": "5" }
+        }
+      }
+    }
+  ]
+}

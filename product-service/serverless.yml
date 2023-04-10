@@ -8,6 +8,18 @@ provider:
   stage: dev
   profile: nodejs-aws-2023q1-q2
 
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - dynamodb:Scan
+        - dynamodb:Query
+      Resource:
+        - arn:aws:dynamodb:us-east-1:*:table/*
+
+  environment:
+    DB_PRODUCTS_TABLE: AWS_CloudX_Course_Products
+    DB_STOCKS_TABLE: AWS_CloudX_Course_Stocks
+
 functions:
   getProductsList:
     handler: handlers.getProductsList
@@ -30,6 +42,7 @@ functions:
 
 plugins:
   - serverless-webpack
+  - serverless-offline
 
 custom:
   webpack:

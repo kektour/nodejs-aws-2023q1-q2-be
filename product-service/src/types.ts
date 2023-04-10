@@ -1,14 +1,7 @@
-export interface Product {
-  id: string;
-  title: string;
-  description: string;
-  price: number;
-}
-
-export interface AvailableProduct extends Product {
-  count: number;
-}
-
-export interface ApiEvent {
+export interface GetApiEvent {
   pathParameters: Record<string, string>;
+}
+
+export interface PostApiEvent {
+  body: string;
 }
