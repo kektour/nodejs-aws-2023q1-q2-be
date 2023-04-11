@@ -9,6 +9,12 @@ export interface AvailableProduct extends Product {
   count: number;
 }
 
+export interface Stock {
+  id: string;
+  count: number;
+  product_id: string;
+}
+
 export interface ProductsProvider {
   getAll(): Promise<Array<Product>>;
   getAllWithCount(): Promise<Array<AvailableProduct>>;

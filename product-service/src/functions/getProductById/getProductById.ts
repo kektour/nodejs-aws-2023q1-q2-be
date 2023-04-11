@@ -1,30 +1,36 @@
 import { ProductsProvider, ProductsProviderImpl } from '../../dataAccess/productsProvider';
-import { StocksProvider, StocksProviderImpl } from '../../dataAccess/stocksProvider';
 import { EnvService, EnvServiceImpl } from '../../services/envService';
 import { UtilsService, UtilsServiceImpl } from '../../services/utilsService';
 import { GetApiEvent } from '../../types';
 
 const handler = async (event: GetApiEvent) => {
+  console.info(`Function: getProductById - PathParameters: ${JSON.stringify(event.pathParameters)}`);
+
   const { id } = event.pathParameters;
 
   const utilsService: UtilsService = new UtilsServiceImpl();
   const envService: EnvService = new EnvServiceImpl();
 
-  const stocksProvider: StocksProvider = new StocksProviderImpl(envService);
-  const productsProvider: ProductsProvider = new ProductsProviderImpl(envService, stocksProvider);
+  const productsProvider: ProductsProvider = new ProductsProviderImpl(envService);
 
-  const product = await productsProvider.getById(id);
+  try {
+    const product = await productsProvider.getById(id);
 
-  if (!product) {
-    return utilsService.createResponse(404, {
-      data: null,
-      error: {
-        message: 'Product not found',
-      },
+    if (!product) {
+      return utilsService.createResponse(404, {
+        data: null,
+        error: { message: 'Product not found' },
+      });
+    }
+
+    return utilsService.createResponse(200, { data: product });
+  } catch (err) {
+    console.error(`Function: getProductById - Error: ${err}`);
+
+    return utilsService.createResponse(500, {
+      error: { message: 'Internal server error' },
     });
   }
-
-  return utilsService.createResponse(200, { data: product });
 };
 
 export default handler;
