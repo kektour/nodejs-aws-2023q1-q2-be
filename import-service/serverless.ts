@@ -23,6 +23,7 @@ const serverlessConfiguration: AWS = {
       NODE_OPTIONS: '--enable-source-maps --stack-trace-limit=1000',
       AWS_GENERAL_REGION: AWS_GENERAL_REGION,
       IMPORT_SERVICE_BUCKET: '${self:custom.environment.IMPORT_SERVICE_BUCKET}',
+      SQS_URL: 'https://sqs.us-east-1.amazonaws.com/466226802026/nodejs-aws-2023q1-q2-queue-1.fifo',
     },
     iam: {
       role: {
@@ -32,6 +33,11 @@ const serverlessConfiguration: AWS = {
             Action: ['s3:GetObject', 's3:PutObject', 's3:DeleteObject'],
             Resource: 'arn:aws:s3:::${self:custom.environment.IMPORT_SERVICE_BUCKET}/*',
           },
+          {
+            Effect: 'Allow',
+            Action: ['sqs:SendMessage'],
+            Resource: 'arn:aws:sqs:us-east-1:466226802026:nodejs-aws-2023q1-q2-queue-1.fifo',
+          }
         ],
       },
     },

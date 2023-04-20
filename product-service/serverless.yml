@@ -15,11 +15,18 @@ provider:
         - dynamodb:PutItem
       Resource:
         - arn:aws:dynamodb:us-east-1:*:table/*
-
+    - Effect: Allow
+      Action: 
+        - sns:Publish
+      Resource:
+        - arn:aws:sns:us-east-1:466226802026:nodejs-aws-2023q1-q2-topic-1
+        # Ref: SNSTopic
   environment:
-    # DynamoDB
     DB_PRODUCTS_TABLE: AWS_CloudX_Course_Products
     DB_STOCKS_TABLE: AWS_CloudX_Course_Stocks
+    SNS_ARN: arn:aws:sns:us-east-1:466226802026:nodejs-aws-2023q1-q2-topic-1
+    # SNS_ARN: 
+    #   Ref: SNSTopic
 
 functions:
   getProductsList:
@@ -46,6 +53,35 @@ functions:
       - httpApi:
           path: /products/{id}
           method: get
+  catalogBatchProcess:
+    handler: handlers.catalogBatchProcess
+    events:
+      - sqs:
+          batchSize: 5
+          arn: arn:aws:sqs:us-east-1:466226802026:nodejs-aws-2023q1-q2-queue-1.fifo
+          # arn: 
+          #   Fn::GetAtt:
+          #     - SQSQueue
+          #     - Arn
+
+# resources:
+#   Resources:
+#     SQSQueue:
+#       Type: AWS::SQS::Queue
+#       Properties:
+#         QueueName: nodejs-aws-2023q1-q2-queue-1.fifo
+#         FifoQueue: true
+#     SNSTopic:
+#       Type: AWS::SNS::Topic
+#       Properties:
+#         TopicName: nodejs-aws-2023q1-q2-topic-1
+#     SNSSubscription:
+#       Type: AWS::SNS::Subscription
+#       Properties:
+#         Endpoint: ''
+#         Protocol: email
+#         TopicArn:
+#           Ref: SNSTopic
 
 plugins:
   - serverless-webpack

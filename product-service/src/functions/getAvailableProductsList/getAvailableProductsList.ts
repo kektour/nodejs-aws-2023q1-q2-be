@@ -1,4 +1,4 @@
-import { ProductsProvider, ProductsProviderImpl } from '../../dataAccess/productsProvider';
+import { ProductsProvider, ProductsProviderImpl, ProductsProviderMockImpl } from '../../dataAccess';
 import { EnvService, EnvServiceImpl } from '../../services/envService';
 import { UtilsService, UtilsServiceImpl } from '../../services/utilsService';
 
@@ -9,6 +9,7 @@ const handler = async () => {
   const envService: EnvService = new EnvServiceImpl();
 
   const productsProvider: ProductsProvider = new ProductsProviderImpl(envService);
+  // const productsProvider: ProductsProvider = new ProductsProviderMockImpl();
 
   try {
     const availableProducts = await productsProvider.getAllWithCount();
