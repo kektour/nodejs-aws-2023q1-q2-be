@@ -82,6 +82,15 @@ functions:
 #         Protocol: email
 #         TopicArn:
 #           Ref: SNSTopic
+#     AdditionalSNSSubscription:
+#       Type: AWS::SNS::Subscription
+#       Properties:
+#         Endpoint: 
+#         Protocol: email
+#         TopicArn:
+#           Ref: SNSTopic
+#         FilterPolicyScope: 'MessageBody'
+#         FilterPolicy: { price: [{ "numeric": ["<", 10] }] }
 
 plugins:
   - serverless-webpack
