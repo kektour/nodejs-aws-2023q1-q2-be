@@ -4,7 +4,7 @@ import { validationSchema } from './validationSchema';
 import { NewProduct } from './types';
 import { ValidationError } from 'yup';
 import { EnvService, EnvServiceImpl } from '../../services/envService';
-import { ProductsProvider, ProductsProviderImpl } from '../../dataAccess/productsProvider';
+import { ProductsProvider, ProductsProviderImpl,ProductsProviderMockImpl } from '../../dataAccess';
 
 const handler = async (event: PostApiEvent) => {
   console.info(`Function: createProduct - Body: ${event.body}`);
@@ -13,6 +13,7 @@ const handler = async (event: PostApiEvent) => {
   const envService: EnvService = new EnvServiceImpl();
 
   const productsProvider: ProductsProvider = new ProductsProviderImpl(envService);
+  // const productsProvider: ProductsProvider = new ProductsProviderMockImpl();
 
   let body: Record<string, any>;
   try {

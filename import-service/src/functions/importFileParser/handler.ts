@@ -1,6 +1,7 @@
 import { S3Handler } from 'aws-lambda';
 import AWS from 'aws-sdk';
 import csvParser from 'csv-parser';
+import crypto from 'crypto';
 
 import { getEnvVar } from '@libs/common';
 
@@ -8,6 +9,7 @@ const importFileParser: S3Handler = async (event) => {
   console.log(`importFileParser - event.Records: ${JSON.stringify(event.Records)}`);
 
   const s3 = new AWS.S3({ region: getEnvVar('AWS_GENERAL_REGION') });
+  const sqs = new AWS.SQS();
 
   for (const record of event.Records) {
     const s3OriginFileParams = {
@@ -18,9 +20,32 @@ const importFileParser: S3Handler = async (event) => {
     const originFileStream = s3.getObject(s3OriginFileParams).createReadStream();
     const csvStream = originFileStream.pipe(csvParser());
 
+    const groupId = crypto.randomUUID();
+
     for await (const jsonLine of csvStream) {
-      console.log(`importFileParser - file: ${JSON.stringify(s3OriginFileParams)} - line: ${JSON.stringify(jsonLine)}`);
+      const message = { meta: {}, availableProduct: jsonLine };
+
+      await sqs
+        .sendMessage({
+          QueueUrl: getEnvVar('SQS_URL'),
+          MessageGroupId: groupId,
+          MessageDeduplicationId: crypto.randomUUID(),
+          MessageBody: JSON.stringify(message),
+        })
+        .promise();
+
+      console.log(`importFileParser - SQS message ${JSON.stringify(message)} was sent`);
     }
+
+    await sqs
+      .sendMessage({
+        QueueUrl: getEnvVar('SQS_URL'),
+        MessageGroupId: groupId,
+        MessageDeduplicationId: crypto.randomUUID(),
+        MessageBody: JSON.stringify({ meta: { isFinished: true }, availableProduct: {} }),
+      })
+      .promise();
+    console.log(`importFileParser - SQS 'close' message was sent`);
 
     await s3
       .copyObject({

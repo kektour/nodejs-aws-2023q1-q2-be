@@ -1,4 +1,4 @@
-import { ProductsProvider, ProductsProviderImpl } from '../../dataAccess/productsProvider';
+import { ProductsProvider, ProductsProviderImpl, ProductsProviderMockImpl } from '../../dataAccess';
 import { EnvService, EnvServiceImpl } from '../../services/envService';
 import { UtilsService, UtilsServiceImpl } from '../../services/utilsService';
 import { GetApiEvent } from '../../types';
@@ -12,6 +12,7 @@ const handler = async (event: GetApiEvent) => {
   const envService: EnvService = new EnvServiceImpl();
 
   const productsProvider: ProductsProvider = new ProductsProviderImpl(envService);
+  // const productsProvider: ProductsProvider = new ProductsProviderMockImpl();
 
   try {
     const product = await productsProvider.getById(id);

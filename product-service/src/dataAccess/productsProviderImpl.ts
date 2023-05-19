@@ -1,6 +1,6 @@
 import { DynamoDB } from 'aws-sdk';
 import crypto from 'crypto';
-import { EnvService } from '../../services/envService';
+import { EnvService } from '../services/envService';
 import { AvailableProduct, Product, ProductsProvider, Stock } from './productsProvider';
 
 export class ProductsProviderImpl implements ProductsProvider {
