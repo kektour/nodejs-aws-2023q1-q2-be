@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@middy/core": "^3.4.0",
-    "@middy/http-json-body-parser": "^3.4.0",
+    "@middy/http-cors": "^4.4.3",
     "aws-sdk": "^2.1359.0",
     "csv-parser": "^3.0.0"
   },
