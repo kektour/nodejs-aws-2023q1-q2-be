@@ -37,7 +37,7 @@ const serverlessConfiguration: AWS = {
             Effect: 'Allow',
             Action: ['sqs:SendMessage'],
             Resource: 'arn:aws:sqs:us-east-1:466226802026:nodejs-aws-2023q1-q2-queue-1.fifo',
-          }
+          },
         ],
       },
     },
@@ -57,6 +57,40 @@ const serverlessConfiguration: AWS = {
     },
     environment: {
       IMPORT_SERVICE_BUCKET: 'nodejs-aws-2023q1-q2-import-service',
+    },
+  },
+  resources: {
+    Resources: {
+      GatewayResponseAccessDenied: {
+        Type: 'AWS::ApiGateway::GatewayResponse',
+        Properties: {
+          ResponseParameters: {
+            'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+            'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+            'gatewayresponse.header.Access-Control-Allow-Methods': "'*'",
+          },
+          ResponseType: 'ACCESS_DENIED',
+          RestApiId: {
+            Ref: 'ApiGatewayRestApi',
+          },
+          StatusCode: '403',
+        },
+      },
+      GatewayResponseUnauthorized: {
+        Type: 'AWS::ApiGateway::GatewayResponse',
+        Properties: {
+          ResponseParameters: {
+            'gatewayresponse.header.Access-Control-Allow-Origin': "'*'",
+            'gatewayresponse.header.Access-Control-Allow-Headers': "'*'",
+            'gatewayresponse.header.Access-Control-Allow-Methods': "'*'",
+          },
+          ResponseType: 'UNAUTHORIZED',
+          RestApiId: {
+            Ref: 'ApiGatewayRestApi',
+          },
+          StatusCode: '401',
+        },
+      },
     },
   },
 };

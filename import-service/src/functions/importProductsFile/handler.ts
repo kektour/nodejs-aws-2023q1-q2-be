@@ -1,4 +1,6 @@
 import AWS from 'aws-sdk';
+import middy from '@middy/core';
+import cors from '@middy/http-cors';
 
 import type { ValidatedEventAPIGatewayProxyGetEvent } from '@libs/apiGateway';
 import { formatJSONResponse } from '@libs/apiGateway';
@@ -29,4 +31,4 @@ const importProductsFile: ValidatedEventAPIGatewayProxyGetEvent<typeof schema> =
   return formatJSONResponse({ uploadUrl });
 };
 
-export const main = importProductsFile;
+export const main = middy(importProductsFile).use(cors());
